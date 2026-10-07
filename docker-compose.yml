@@ -1,0 +1,28 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: ticket_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ticket_management
+      MYSQL_USER: ticket_user
+      MYSQL_PASSWORD: ticket_password
+    
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  api:
+    build: .
+    container_name: ticket_api
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.docker
+
+volumes:
+  mysql_data:
